@@ -8,11 +8,11 @@
             </div>
 
             <div class="modal-body">
-                <form id="formCadastro">
+                <form method="post" action="scripts/salvar_investimentos.php" id="formCadastro">
 
                     <div class="mb-3">
                         <label for="nomeAtivo" class="form-label">Nome / Ticker</label>
-                        <input type="text" class="form-control" id="nomeAtivo" placeholder="Ex: PETR4" required>
+                        <input type="text" class="form-control" id="nomeAtivo" name="nomeAtivo" placeholder="Ex: PETR4" required>
                     </div>
 
                     <div class="mb-3">
@@ -55,14 +55,12 @@
                         <div class="form-text">Deixe em branco se for isento.</div>
                     </div>
 
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar cadastro</button>
+                    </div>
                 </form>
             </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="salvarCadastro()">Salvar cadastro</button>
-            </div>
-
         </div>
     </div>
 
