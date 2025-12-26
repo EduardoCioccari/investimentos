@@ -1,6 +1,7 @@
 <?php
 
 require_once "../config/db_conexao.php";
+include "funcoes.php";
 
 $nome_ativo = strtoupper($_POST["nomeAtivo"]);
 $classe_ativo = $_POST["classeAtivo"];
@@ -12,7 +13,7 @@ $imposto = $_POST["impostoRenda"];
 
 try {
     // Verificando se o ativo já existe no banco.
-    $sql_consultado = "SELECT id_ativo FROM ativos WHERE nome_ativo = :nome_ativo";
+    $sql_consultado = "SELECT id_ativo, quantidade_comprada, valor_pago FROM ativos WHERE nome_ativo = :nome_ativo";
     $stmt = $conexao->prepare($sql_consultado);
     $stmt->execute([
         ":nome_ativo" => $nome_ativo,
@@ -20,17 +21,20 @@ try {
 
     $ativo_consultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Se o ativo existe é feito o update.
+    // Se o ativo existe é feito o update das infos.
     if ($ativo_consultado) {
 
+        $novo_preco_medio = calcularPrecoMedio($ativo_consultado["quantidade_comprada"], $ativo_consultado["valor_pago"], $quantidade_comprada, $valor_pago);
+
         $id_ativo = $ativo_consultado["id_ativo"];
-        $sql_update = "UPDATE ativos SET quantidade_comprada = quantidade_comprada + :quantidade_comprada WHERE id_ativo = :id_ativo";
+        $sql_update = "UPDATE ativos SET quantidade_comprada = quantidade_comprada + :quantidade_comprada, valor_pago = :novo_preco_medio WHERE id_ativo = :id_ativo";
 
         $stmt = $conexao->prepare($sql_update);
 
         $stmt->execute([
             ":quantidade_comprada" => $quantidade_comprada,
-            ":id_ativo" => $id_ativo
+            ":id_ativo" => $id_ativo,
+            ":novo_preco_medio" => $novo_preco_medio
         ]);
     } else {
 
